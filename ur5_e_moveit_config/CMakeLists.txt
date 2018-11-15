@@ -35,6 +35,9 @@ catkin_package()
 add_executable(move_group_interface_tutorial src/main.cpp)
 target_link_libraries(move_group_interface_tutorial ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
+add_executable(planning_scene_ros_api_tutorial src/planning_scene_ros.cpp)
+target_link_libraries(planning_scene_ros_api_tutorial ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
 if (CATKIN_ENABLE_TESTING)
   find_package(roslaunch REQUIRED)
   roslaunch_add_file_check(tests/moveit_planning_execution.xml)

@@ -20,11 +20,9 @@ int main(int argc, char** argv)
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
 
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
-  const robot_state::JointModelGroup* joint_model_group =
-    move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
 
   namespace rvt = rviz_visual_tools;
-  moveit_visual_tools::MoveItVisualTools visual_tools("base");
+  moveit_visual_tools::MoveItVisualTools visual_tools("base_link");
   visual_tools.deleteAllMarkers();
 
   visual_tools.loadRemoteControl();
@@ -39,7 +37,7 @@ int main(int argc, char** argv)
   primitive.dimensions.resize(3);
   primitive.dimensions[0] = 0.4;
   primitive.dimensions[1] = 0.1;
-  primitive.dimensions[2] = 0.4;
+  primitive.dimensions[2] = 100;
 
   geometry_msgs::Pose box_pose;
   box_pose.orientation.w = 1.0;
@@ -62,7 +60,7 @@ int main(int argc, char** argv)
   visual_tools.publishText(text_pose, "Add object", rvt::WHITE, rvt::XLARGE);
   visual_tools.trigger();
 
-  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to once the collision object appears in RViz");
+  // visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to once the collision object appears in RViz");
   
   ros::shutdown();
   return 0;
