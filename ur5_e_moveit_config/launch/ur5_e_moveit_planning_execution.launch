@@ -1,5 +1,5 @@
 <launch>
-  <arg name="sim" default="true" />
+  <arg name="sim" default="false" />
   <arg name="limited" default="false"/>
   <arg name="debug" default="false" />
   
@@ -16,7 +16,7 @@
     <arg name="debug" default="$(arg debug)" />
   </include>
 
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+<!--   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" /> -->
 
   <arg unless="$(arg debug)" name="launch_prefix" value="" />
   <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />

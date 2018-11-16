@@ -5,7 +5,8 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Status1
-        - /MotionPlanning1/Planning Request1
+        - /MotionPlanning1
+        - /MotionPlanning1/Planned Path1
         - /PlanningScene1
         - /PlanningScene1/Scene Geometry1
         - /PlanningScene1/Scene Robot1
@@ -140,7 +141,7 @@ Visualization Manager:
         Robot Color: 150; 50; 150
         Show Robot Collision: false
         Show Robot Visual: true
-        Show Trail: true
+        Show Trail: false
         State Display Time: 0.05 s
         Trail Step Size: 1
         Trajectory Topic: /move_group/display_planned_path
@@ -338,25 +339,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.54384089
+      Distance: 2.27963662
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.0468256213
-        Y: 0.142706782
-        Z: -0.0656781346
+        X: -0.0855251849
+        Y: 0.00232811668
+        Z: 0.129502743
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.550397933
+      Pitch: 0.240397811
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.325399876
+      Yaw: 1.63539422
     Saved: ~
 Window Geometry:
   Displays:
