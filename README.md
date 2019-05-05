@@ -1,97 +1,77 @@
-# Universal Robot
+This is Zhaoyuan's tutorial of how to use UR arm. 
 
-[![Build Status](http://build.ros.org/job/Kdev__universal_robot__ubuntu_xenial_amd64/badge/icon)](http://build.ros.org/job/Kdev__universal_robot__ubuntu_xenial_amd64)
+Updated on 5/4/19.
 
-[![support level: community](https://img.shields.io/badge/support%20level-community-lightgray.png)](http://rosindustrial.org/news/2016/10/7/better-supporting-a-growing-ros-industrial-software-platform)
+Tested on UR5e in Biorobotics Lab.
 
-[ROS-Industrial](http://wiki.ros.org/Industrial) Universal Robot meta-package. See the [ROS wiki](http://wiki.ros.org/universal_robot) page for compatibility information and other more information.
+1. clone https://github.com/guzhaoyuan/universal_robot/tree/gzy, into ros workspace. use branch gzy
 
-This repository provides ROS support for the universal robots.  This repo holds source code for all versions > groovy.  For those versions <= groovy see: hg https://kforge.ros.org/ros_industrial/universal_robot
+2. clone https://github.com/guzhaoyuan/ur_modern_driver/tree/gzy, into ros workspace. use branch gzy
 
+3. install ros-kinetic related dependancies if complie fails. As far as I know, at least these package should be installed
 
-__Installation from Source__  
-There are releases available for ROS Hydro and ROS Indigo. However, for the latest features and developments you might want to install from source.
+```
+sudo apt install ros-kinetic-moveit-core industrial_msgs moveit_kinematics moveit_visual_tools moveit_ros_planning_interface ros-kinetic-controller-manager ros-kinetic-moveit-ros-control-interface sudo apt install ros-kinetic-moveit-planners-ompl ros-kinetic-moveit-ros-visualization ros-kinetic-moveit-commander
+```
 
-First set up a catkin workspace (see [this tutorials](http://wiki.ros.org/catkin/Tutorials)).  
-Then clone the repository into the src/ folder. It should look like /path/to/your/catkin_workspace/src/universal_robot.  
-Make sure to source the correct setup file according to your workspace hierarchy, then use ```catkin_make``` to compile.  
+4. check the ip of the robot in the teach pendant, in my example the ip is 10.10.10.61, ping the robot to make sure you could connect to the robot
 
----
+```
+ping 10.10.10.61
+```
 
-__Usage with real Hardware__  
-There are launch files available to bringup a real robot - either UR5 or UR10.  
-In the following the commands for the UR5 are given. For the UR10, simply replace the prefix accordingly.
+5. open the ur_modern_driver.
 
-Don't forget to source the correct setup shell files and use a new terminal for each command!   
+```
+roslaunch ur_modern_driver ur5e_bringup.launch robot_ip:=10.10.10.61
+```
 
-To bring up the real robot, run:
+6. in another terminal, 
 
-```roslaunch ur_bringup ur5_bringup.launch robot_ip:=IP_OF_THE_ROBOT [reverse_port:=REVERSE_PORT]```
+```
+rostopic echo /joint_states to see joint angles
+```
 
-A simple test script that moves the robot to predefined positions can be executed like this:
+if the joint numbers are keep updating, then the driver part is done. Next you have several options.
 
-```rosrun ur_driver test_move.py```
+7. First try control the robot using URscript from command line, it is quite handy
 
+```
+rostopic pub /ur_driver/URScript std_msgs/String "movej([0,-1.57,0,-1.57,0,0],a=30, v=20, t=0, r=0)"
+```
 
-CAUTION:  
-Remember that you should always have your hands on the big red button in case there is something in the way or anything unexpected happens.
+8. read script manual to understand how to set up the system and send approporate control. Basically, all commands in Chapter 2 of the script manual can be sent to the robot using this cmd method
 
+9. try "test_move.py". It use /follow_joint_trajectory interface to send a joint trajectory and then follows it, in another terminal:
 
-__MoveIt! with real Hardware__  
-Additionally, you can use MoveIt! to control the robot.  
-There exist MoveIt! configuration packages for both robots.  
+```
+cd ur_modern_driver
+python test_move.py
+```
 
-For setting up the MoveIt! nodes to allow motion planning run:
+10. Use moveit to plan and control, in another terminal:
 
-```roslaunch ur5_moveit_config ur5_moveit_planning_execution.launch```
+```
+roslaunch ur5_e_moveit_config ur5_e_moveit_planning_execution.launch
+```
 
-For starting up RViz with a configuration including the MoveIt! Motion Planning plugin run:
+try play using moveit
 
-```roslaunch ur5_moveit_config moveit_rviz.launch config:=true```
+11. Use a python script to talk to moveit, plan and control using python. So with the moveit window in step 10 open, in another terminal:
 
+```
+cd universal_robot/ur5_e_moveit_config/scripts
+python planning_scene.py
+```
 
-NOTE:  
-As MoveIt! seems to have difficulties with finding plans for the UR with full joint limits [-2pi, 2pi], there is a joint_limited version using joint limits restricted to [-pi,pi]. In order to use this joint limited version, simply use the launch file arguments 'limited', i.e.:  
+play follow the instruction in the terminal.
 
-```roslaunch ur_bringup ur5_bringup.launch limited:=true robot_ip:=IP_OF_THE_ROBOT [reverse_port:=REVERSE_PORT]```
+12. So a complete workflow to this point is
 
-```roslaunch ur5_moveit_config ur5_moveit_planning_execution.launch limited:=true```
+	A. power on the robot, make sure its network address is 10.10.10.61, and you could ping the robot
 
-```roslaunch ur5_moveit_config moveit_rviz.launch config:=true```
-
-
----
-
-__Usage with Gazebo Simulation__  
-There are launch files available to bringup a simulated robot - either UR5 or UR10.  
-In the following the commands for the UR5 are given. For the UR10, simply replace the prefix accordingly.
-
-Don't forget to source the correct setup shell files and use a new terminal for each command!   
-
-To bring up the simulated robot in Gazebo, run:
-
-```roslaunch ur_gazebo ur5.launch```
-
-
-__MoveIt! with a simulated robot__  
-Again, you can use MoveIt! to control the simulated robot.  
-
-For setting up the MoveIt! nodes to allow motion planning run:
-
-```roslaunch ur5_moveit_config ur5_moveit_planning_execution.launch sim:=true```
-
-For starting up RViz with a configuration including the MoveIt! Motion Planning plugin run:
-
-```roslaunch ur5_moveit_config moveit_rviz.launch config:=true```
-
-
-NOTE:  
-As MoveIt! seems to have difficulties with finding plans for the UR with full joint limits [-2pi, 2pi], there is a joint_limited version using joint limits restricted to [-pi,pi]. In order to use this joint limited version, simply use the launch file arguments 'limited', i.e.:  
-
-```roslaunch ur_gazebo ur5.launch limited:=true```
-
-```roslaunch ur5_moveit_config ur5_moveit_planning_execution.launch sim:=true limited:=true```
-
-```roslaunch ur5_moveit_config moveit_rviz.launch config:=true```
-
-
+	B. roslaunch ur_modern_driver ur5e_bringup.launch robot_ip:=10.10.10.61
+	
+	C. roslaunch ur5_e_moveit_config ur5_e_moveit_planning_execution.launch
+  
+	D. python planning_scene.py
