@@ -1,4 +1,6 @@
-This is Zhaoyuan's tutorial of how to use UR arm. 
+# UR5e Quick start
+
+This is Zhaoyuan's tutorial of how to use UR5e arm. 
 
 Updated on 5/4/19.
 
@@ -14,7 +16,9 @@ Tested on UR5e in Biorobotics Lab.
 sudo apt install ros-kinetic-moveit-core industrial_msgs moveit_kinematics moveit_visual_tools moveit_ros_planning_interface ros-kinetic-controller-manager ros-kinetic-moveit-ros-control-interface sudo apt install ros-kinetic-moveit-planners-ompl ros-kinetic-moveit-ros-visualization ros-kinetic-moveit-commander
 ```
 
-4. check the ip of the robot in the teach pendant, in my example the ip is 10.10.10.61, ping the robot to make sure you could connect to the robot
+4. Power on and enable robot. Make sure the robot is in **remote control** mode.
+
+Check the ip of the robot in the teach pendant, in my example the ip is 10.10.10.61. ping the robot to make sure you could connect to the robot. 
 
 ```
 ping 10.10.10.61
